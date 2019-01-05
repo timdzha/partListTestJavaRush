@@ -1,0 +1,11 @@
+DROP DATABASE IF EXISTS test;
+CREATE DATABASE test;
+USE test;
+
+CREATE TABLE `parts` (
+  `id` INT(8) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `name` VARCHAR (100) NOT NULL ,
+  `category` VARCHAR (100) NOT NULL ,
+  `is_main` BIT(1) NOT NULL)
+COLLATE='utf8_general_ci';
+

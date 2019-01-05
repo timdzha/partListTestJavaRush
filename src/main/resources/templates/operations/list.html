@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="partList">
+    <form class="form-inline" th:action="@{/search}" name="input_form" id="input_form" method="post" role="form">
+        <div class="form-group">
+            <input type="text" class="form-control" id="searchName" th:name="searchName" th:value="${searchName}" maxlength="100">
+        </div>
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+    <table class="table table-bordered table-hover horizontal-align" style="font-size:16px">
+        <thead>
+        <tr>
+            <th style="width: 40%">
+                <a href="#" th:href="@{/add}"><i class="fa fa-plus"></i> </a>
+                Наименование
+                <a th:if="${sortDir} == 'ASC'" th:href="@{'/sort/{sortDir}' (sortDir = 'ASC')}"><i class="fa fa-fw fa-sort-desc"></i></a>
+                <a th:if="${sortDir} == 'NO_SORT'" th:href="@{'/sort/{sortDir}' (sortDir = 'NO_SORT')}"><i class="fa fa-fw fa-sort"></i></a>
+                <a th:if="${sortDir} == 'DESC'" th:href="@{'/sort/{sortDir}' (sortDir = 'DESC')}"><i class="fa fa-fw fa-sort-asc"></i></a>
+
+            </th>
+            <th style="width: 5%" class="dropdown">
+                <a class="dropdown-toggle" th:text="Необходимость + ${filterMain == null ? '' : filterMain}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Необходимость</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" th:href="@{'/filter/{filterMain}' (filterMain = 1)}">Да</a>
+                    <a class="dropdown-item" th:href="@{'/filter/{filterMain}' (filterMain = 0)}">Нет</a>
+                    <a class="dropdown-item" th:href="@{'/filter/{filterMain}' (filterMain = -1)}">Все</a>
+                </div>
+            </th>
+            <th style="width: 10%">Количество</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="part : ${partPage.content}">
+            <td style="text-align: left" >
+                <a th:href="@{'/edit/{id}'(id=${part.id})}"><i class="fa fa-edit"></i></a>
+                <i th:text="${part.name}"></i>
+            </td>
+            <td style="text-align: center">
+                <i th:if="${part.isMainPart} == true">Да</i>
+                <i th:if="${part.isMainPart} == false">Нет</i>
+            </td>
+            <td style="text-align: center">
+                <a th:href="@{'/add/{id}'(id=${part.id})}"><i class="fa fa-plus"></i></a>
+                <i th:text="${part.count}" ></i>
+                <a th:href="@{'/delete/{id}'(id=${part.id})}"><i class="fa fa-minus" ></i></a>
+            </td>
+        </tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr style="text-align: center">
+            <td>Можно собрать</td>
+            <td th:text="${pcCount}"></td>
+            <td th:text="${pcCountText}">Компьютеров</td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${partPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+        <a font-size="16px" th:href="@{/(size=${partPage.size}, page=${pageNumber})}" th:text="${pageNumber}" th:class="${pageNumber==partPage.number + 1} ? active"></a>
+    </div>
+</div>
+</html>
